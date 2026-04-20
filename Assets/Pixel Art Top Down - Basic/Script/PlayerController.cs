@@ -5,15 +5,15 @@ public class PlayerController : MonoBehaviour
 {
     public float speed = 5f;
     public int score = 0;
-    public bool hasKey = false;
-    public bool hasWater = false;
+
+    public bool hasCofre = false;   // 🔄 antes hasKey
+    public bool hasTumba = false;   // 🔄 antes hasWater
 
     public TextMeshProUGUI textScore; 
     public TextMeshProUGUI notificationText;
 
     void Start()
     {
-       // ❌ COMENTAR porque textScore es null
        // UpdateTextScore(); 
     }
 
@@ -32,7 +32,6 @@ public class PlayerController : MonoBehaviour
         {
             score = score + 1;
 
-            // ❌ COMENTAR
             // UpdateTextScore();
             // ShowNotification("Collected!"); 
 
@@ -41,32 +40,29 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Score: " + score);
         }
 
-        if(other.CompareTag("Key"))
+        if(other.CompareTag("Cofre"))
         {
-            hasKey = true;
+            hasCofre = true;
             score = score + 5;
 
-            // ❌ COMENTAR
             // UpdateTextScore();
-            // ShowNotification("KEY Collected!"); 
+            // ShowNotification("COFRE Collected!"); 
 
-            Debug.Log("KEY Collected!");
+            Debug.Log("COFRE Collected!");
             Destroy(other.gameObject);
         }
 
-        if(other.CompareTag("Water"))
+        if(other.CompareTag("Tumba"))
         {
-            hasWater = true;
+            hasTumba = true;
 
-            // ❌ COMENTAR
-            // ShowNotification("Has tocado el agua, no puedes ganar");
+            // ShowNotification("Has tocado la tumba, no puedes ganar");
 
-            Debug.Log("Has tocado el agua, comunicate con el servicio tecnico de Samsung, Oh!");
+            Debug.Log("Has tocado la tumba, no puedes ganar");
         }
                 
-        if (score >= 3 && hasKey == true && !hasWater)
+        if (score >= 3 && hasCofre == true && !hasTumba)
         {
-            // ❌ COMENTAR
             // ShowNotification("You Won!");
 
             Debug.Log("You Won!");
@@ -75,13 +71,11 @@ public class PlayerController : MonoBehaviour
 
     void UpdateTextScore()
     {
-        // ❌ COMENTAR
         // textScore.text = "Score: " + score;
     }
 
     void ShowNotification(string message)
     {
-        // ❌ COMENTAR
         // notificationText.text = message; 
     }
 }
