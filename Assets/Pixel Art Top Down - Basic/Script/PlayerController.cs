@@ -6,15 +6,15 @@ public class PlayerController : MonoBehaviour
     public float speed = 5f;
     public int score = 0;
 
-    public bool hasCofre = false;   // 🔄 antes hasKey
-    public bool hasTumba = false;   // 🔄 antes hasWater
+    public bool hasCofre = false;  
+    public bool hasTumba = false;   
 
     public TextMeshProUGUI textScore; 
     public TextMeshProUGUI notificationText;
 
     void Start()
     {
-       // UpdateTextScore(); 
+       UpdateTextScore(); 
     }
 
     void Update()
@@ -32,8 +32,8 @@ public class PlayerController : MonoBehaviour
         {
             score = score + 1;
 
-            // UpdateTextScore();
-            // ShowNotification("Collected!"); 
+            UpdateTextScore();
+            ShowNotification("Collected!"); 
 
             Destroy(other.gameObject);
             Debug.Log("Collected!");
@@ -45,10 +45,10 @@ public class PlayerController : MonoBehaviour
             hasCofre = true;
             score = score + 5;
 
-            // UpdateTextScore();
-            // ShowNotification("COFRE Collected!"); 
+            UpdateTextScore();
+            ShowNotification("Encontraste el cofre!"); 
 
-            Debug.Log("COFRE Collected!");
+            Debug.Log("Encontraste el cofre!");
             Destroy(other.gameObject);
         }
 
@@ -56,26 +56,26 @@ public class PlayerController : MonoBehaviour
         {
             hasTumba = true;
 
-            // ShowNotification("Has tocado la tumba, no puedes ganar");
+            ShowNotification("Has tocado la runa, no puedes ganar");
 
-            Debug.Log("Has tocado la tumba, no puedes ganar");
+            Debug.Log("Has tocado la runa, no puedes ganar");
         }
                 
         if (score >= 3 && hasCofre == true && !hasTumba)
         {
-            // ShowNotification("You Won!");
+          ShowNotification("Ganaste!");
 
-            Debug.Log("You Won!");
+            Debug.Log("Ganaste!");
         }
     }
 
     void UpdateTextScore()
     {
-        // textScore.text = "Score: " + score;
+        textScore.text = "Score: " + score;
     }
 
     void ShowNotification(string message)
     {
-        // notificationText.text = message; 
+     notificationText.text = message; 
     }
 }
