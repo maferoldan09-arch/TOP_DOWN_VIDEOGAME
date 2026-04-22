@@ -1,33 +1,39 @@
 using UnityEngine;
-using TMPro; 
+using TMPro;
+using UnityEngine.SceneManagement; // Se agrega para poder reiniciar la escena
 
 public class PlayerController : MonoBehaviour
 {
     public float speed = 5f;
-
-    // PUNTAJE TOTAL
     public int score = 0;
 
-    // CONTADORES
-    public int monedas = 0;
-    public int totalMonedas = 60;
+    // Contadores de flores 
+    public int flores = 0;
+    public int totalFlores = 60;
 
+    public int flores2 = 0;
+    public int totalFlores2 = 20;
+
+    // Objeto especial de victoria
     public int cofres = 0;
-    public int totalCofres = 2;
 
+    // Estados del juego
     public bool hasCofre = false;
     public bool hasTumba = false;
 
-    // EXTOS UI
+    // Textos de UI separados para cada contador
     public TextMeshProUGUI scoreText;
-    public TextMeshProUGUI monedasText;
+    public TextMeshProUGUI floresText;
+    public TextMeshProUGUI flores2Text;
     public TextMeshProUGUI cofresText;
     public TextMeshProUGUI notificationText;
 
     void Start()
     {
+        // Se inicializan los textos al iniciar el juego
         UpdateScore();
-        UpdateMonedas();
+        UpdateFlores();
+        UpdateFlores2();
         UpdateCofres();
     }
 
@@ -42,22 +48,35 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // MONEDAS
+        // Flores de 1 punto
         if(other.CompareTag("Collectable"))
         {
-            monedas++;
+            flores++;
             score += 1;
 
-            UpdateMonedas();
+            UpdateFlores();
             UpdateScore();
 
-            ShowNotification("Flor recogida!");
+            ShowNotification("Flor recogida");
 
             Destroy(other.gameObject);
-            Debug.Log("Flor recogida");
         }
 
-        // COFRE
+        // Flores de 2 puntos
+        if(other.CompareTag("Collectable_2"))
+        {
+            flores2++;
+            score += 2;
+
+            UpdateFlores2();
+            UpdateScore();
+
+            ShowNotification("Flor especial recogida");
+
+            Destroy(other.gameObject);
+        }
+
+        // Cofre de victoria
         if(other.CompareTag("Cofre"))
         {
             cofres++;
@@ -67,31 +86,26 @@ public class PlayerController : MonoBehaviour
             UpdateCofres();
             UpdateScore();
 
-            ShowNotification("Cofre recogido!");
+            ShowNotification("¡Ganaste!");
+            Debug.Log("Ganaste");
 
             Destroy(other.gameObject);
-            Debug.Log("Cofre recogido");
         }
 
-        // TUMBA
+        // Tumba para derrota
         if(other.CompareTag("Tumba"))
         {
             hasTumba = true;
 
-            ShowNotification("Has tocado una tumba");
+            ShowNotification("Game Over");
+            Debug.Log("Game Over");
 
-            Debug.Log("Has tocado la tumba");
-        }
-
-        // CONDICION DE VICTORIA
-        if (monedas == totalMonedas && cofres == totalCofres && !hasTumba)
-        {
-            ShowNotification("¡Ganaste!");
-            Debug.Log("Ganaste!");
+            // Se retrasa el reinicio para que el mensaje sea visible
+            Invoke("ReiniciarEscena", 2f);
         }
     }
 
-    // ACTUALIZAR UI
+    // Actualizar la UI
 
     void UpdateScore()
     {
@@ -99,21 +113,33 @@ public class PlayerController : MonoBehaviour
             scoreText.text = "Puntaje: " + score;
     }
 
-    void UpdateMonedas()
+    void UpdateFlores()
     {
-        if(monedasText != null)
-            monedasText.text = "Monedas: " + monedas + "/" + totalMonedas;
+        if(floresText != null)
+            floresText.text = "Flores: " + flores + "/" + totalFlores;
+    }
+
+    void UpdateFlores2()
+    {
+        if(flores2Text != null)
+            flores2Text.text = "Flores especiales: " + flores2 + "/" + totalFlores2;
     }
 
     void UpdateCofres()
     {
         if(cofresText != null)
-            cofresText.text = "Cofres: " + cofres + "/" + totalCofres;
+            cofresText.text = "Cofres: " + cofres;
     }
 
     void ShowNotification(string message)
     {
         if(notificationText != null)
-            notificationText.text = message; 
+            notificationText.text = message;
+    }
+
+    // Para reiniciar la escena al morir
+    void ReiniciarEscena()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
